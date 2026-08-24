@@ -21,6 +21,13 @@ jobs:
           WEBHOOK_URL: ${{ secrets.VISUAL_TESTING_WEBHOOK_URL }}
           WEBHOOK_SECRET: ${{ secrets.GITHUB_WEBHOOK_SECRET }}
         run: |
+          # Visual testing is optional. Do not fail regular pushes when the
+          # external testing service has not been configured for this repo.
+          if [ -z "$WEBHOOK_URL" ] || [ -z "$WEBHOOK_SECRET" ]; then
+            echo "Visual-test webhook is not configured; skipping dispatch."
+            exit 0
+          fi
+
           # 1. Build the payload matching the exact format server.js expects
           PAYLOAD=$(jq -n \
             --arg repo "${{ github.repository }}" \
