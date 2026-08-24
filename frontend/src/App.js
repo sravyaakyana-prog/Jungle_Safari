@@ -204,19 +204,4 @@ function App() {
 
 export default App;
 
-function App() {
-  return (
-    <div className="App">
-      {/* ========================================================= */}
-      {/* VISUAL REGRESSION TEST CODE CHANGE                        */}
-      {/* Purpose: Triggers visual diff against baseline            */}
-      {/* ========================================================= */}
-      <div style={{ backgroundColor: '#dc2626', color: 'white', padding: '15px', textAlign: 'center', fontWeight: 'bold' }}>
-         ⚠️ NOTICE: Seasonal Inventory Update in Progress ⚠️
-      </div>
-      {/* ========================================================= */}
 
-      {/* Your existing app routes / components follow here */}
-    </div>
-  );
-}
