@@ -778,17 +778,10 @@ const CustomerDashboard = () => {
 
         {activeView === "shop" ? (
           <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
-              <Box
-                sx={{
-                  position: { md: "sticky" },
-                  top: { md: 24 },
-                }}
-              >
-                {renderCart()}
-              </Box>
+            <Grid item xs={12}>
+              {renderCart()}
             </Grid>
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12}>
               {renderProductGrid()}
             </Grid>
           </Grid>
