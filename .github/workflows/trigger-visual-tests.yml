@@ -1,54 +1,56 @@
+# Jungle_safari/.github/workflows/trigger-visual-tests.yml
 name: Trigger AI Visual Tests
 
 on:
   push:
-    branches: [main]   # fires every time you push code to Jungle Safari
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  # ── Job 1: Customer Dashboard tests ────────────────────────────────────────
-  trigger-customer-tests:
+  visual-test-trigger:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Customer Dashboard Tests
-        run: |
-          curl -X POST \
-            https://api.github.com/repos/guptaabhishek2265/Ai_visual_Testing/dispatches \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ secrets.VISUAL_TESTING_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "event_type": "run-visual-tests",
-              "client_payload": {
-                "app_url":        "https://jungle-safari-e9on.vercel.app/login",
-                "email":          "c@gmail.com",
-                "password":       "${{ secrets.CUSTOMER_PASSWORD }}",
-                "steps_url":      "https://raw.githubusercontent.com/guptaabhishek2265/Jungle_safari/main/visual-tests/customer-steps.txt",
-                "source_repo":    "guptaabhishek2265/Jungle_safari",
-                "commit_message": "${{ github.event.head_commit.message }}",
-                "commit_sha":     "${{ github.sha }}"
-              }
-            }'
+      - name: Checkout Application Code
+        uses: actions/checkout@v4
 
-  # ── Job 2: Inventory Dashboard tests ───────────────────────────────────────
-  trigger-inventory-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Inventory Dashboard Tests
+      - name: Dispatch Run to Visual Testing SaaS
+        env:
+          # IMPORTANT: Add these two secrets to your Jungle Safari GitHub Repo settings!
+          # WEBHOOK_URL is the one generated in the SaaS UI (e.g., https://your-tunnel.trycloudflare.com/api/webhook/project_123)
+          WEBHOOK_URL: ${{ secrets.VISUAL_TESTING_WEBHOOK_URL }}
+          WEBHOOK_SECRET: ${{ secrets.GITHUB_WEBHOOK_SECRET }}
         run: |
-          curl -X POST \
-            https://api.github.com/repos/guptaabhishek2265/Ai_visual_Testing/dispatches \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ secrets.VISUAL_TESTING_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "event_type": "run-visual-tests",
-              "client_payload": {
-                "app_url":        "https://jungle-safari-e9on.vercel.app/login",
-                "email":          "inv@gmail.com",
-                "password":       "${{ secrets.INVENTORY_PASSWORD }}",
-                "steps_url":      "https://raw.githubusercontent.com/guptaabhishek2265/Jungle_safari/main/visual-tests/inventory-steps.txt",
-                "source_repo":    "guptaabhishek2265/Jungle_safari",
-                "commit_message": "${{ github.event.head_commit.message }}",
-                "commit_sha":     "${{ github.sha }}"
+          # 1. Build the payload matching the exact format server.js expects
+          PAYLOAD=$(jq -n \
+            --arg repo "${{ github.repository }}" \
+            --arg event "${{ github.event_name }}" \
+            --arg sha "${{ github.sha }}" \
+            --arg ref "${{ github.ref }}" \
+            --arg pr_sha "${{ github.event.pull_request.head.sha }}" \
+            --arg pr_ref "${{ github.event.pull_request.head.ref }}" \
+            --arg pr_title "${{ github.event.pull_request.title }}" \
+            --arg commit_msg "${{ github.event.head_commit.message }}" \
+            '{
+              repository: { full_name: $repo },
+              after: $sha,
+              ref: $ref,
+              pull_request: {
+                head: { sha: $pr_sha, ref: $pr_ref },
+                title: $pr_title
+              },
+              head_commit: {
+                id: $sha,
+                message: $commit_msg
               }
-            }'
+            }')
+          
+          # 2. Generate HMAC SHA256 Signature to authenticate securely with your SaaS
+          SIGNATURE=$(echo -n "$PAYLOAD" | openssl dgst -sha256 -hmac "$WEBHOOK_SECRET" | sed 's/^.* //')
+          
+          # 3. Fire the webhook to the SaaS Engine
+          curl -X POST "$WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -H "X-GitHub-Event: ${{ github.event_name }}" \
+            -H "X-Hub-Signature-256: sha256=$SIGNATURE" \
+            -d "$PAYLOAD"
