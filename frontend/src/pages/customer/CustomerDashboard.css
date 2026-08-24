@@ -105,12 +105,11 @@
 
 .product-card-actions {
   background-color: transparent;
-  left: 0;
-  padding: 0 10px !important;
-  position: absolute;
-  right: 0;
-  top: 38px;
-  z-index: 2;
+  display: flex;
+  justify-content: center;
+  padding: 12px 10px 0 !important;
+  position: static;
+  z-index: 1;
 }
 
 .card-title {

@@ -349,7 +349,7 @@ const CustomerDashboard = () => {
                 }
                 alt={product.name}
               />
-              <CardActions className="product-card-actions">
+              <CardActions className="product-card-actions" sx={{ justifyContent: "center", px: 2, pt: 1.5, pb: 0 }}>
                 <Button
                   variant="contained"
                   color="primary"
