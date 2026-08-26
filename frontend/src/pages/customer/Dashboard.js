@@ -361,8 +361,8 @@ const CustomerDashboard = () => {
                     minWidth: "76px !important",
                     height: 76,
                     borderRadius: "50% !important",
-                    backgroundColor: "#1565c0 !important",
-                    boxShadow: "0 6px 14px rgba(21, 101, 192, 0.35) !important",
+                    backgroundColor: "#2e7d32 !important",
+                    boxShadow: "0 6px 14px rgba(46, 125, 50, 0.35) !important",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
@@ -372,11 +372,11 @@ const CustomerDashboard = () => {
                     lineHeight: 1.05,
                     textAlign: "center",
                     "&:hover": {
-                      backgroundColor: "#0d47a1 !important",
-                      boxShadow: "0 8px 18px rgba(13, 71, 161, 0.45) !important",
+                      backgroundColor: "#1b5e20 !important",
+                      boxShadow: "0 8px 18px rgba(27, 94, 32, 0.45) !important",
                     },
                     "&.Mui-disabled": {
-                      backgroundColor: "rgba(21, 101, 192, 0.45) !important",
+                      backgroundColor: "rgba(46, 125, 50, 0.45) !important",
                       color: "rgba(255, 255, 255, 0.75) !important",
                     },
                   }}
