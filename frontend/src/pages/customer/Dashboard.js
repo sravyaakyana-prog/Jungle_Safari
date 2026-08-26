@@ -357,9 +357,9 @@ const CustomerDashboard = () => {
                   disabled={product.stock === 0}
                   className="primary-button product-add-button"
                   sx={{
-                    width: 76,
-                    minWidth: "76px !important",
-                    height: 76,
+                    width: 88,
+                    minWidth: "88px !important",
+                    height: 88,
                     borderRadius: "50% !important",
                     backgroundColor: "#1565c0 !important",
                     boxShadow: "0 6px 14px rgba(21, 101, 192, 0.35) !important",
@@ -368,7 +368,7 @@ const CustomerDashboard = () => {
                     alignItems: "center",
                     justifyContent: "center",
                     gap: 0.4,
-                    p: "8px !important",
+                    p: "10px !important",
                     lineHeight: 1.05,
                     textAlign: "center",
                     "&:hover": {
@@ -381,8 +381,8 @@ const CustomerDashboard = () => {
                     },
                   }}
                 >
-                  <CartIcon sx={{ fontSize: 18 }} />
-                  <Box component="span" sx={{ fontSize: 11, fontWeight: 700 }}>
+                  <CartIcon sx={{ fontSize: 20 }} />
+                  <Box component="span" sx={{ fontSize: 12, fontWeight: 700 }}>
                     {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
                   </Box>
                 </Button>
