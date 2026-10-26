@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Box } from "@mui/material";
+// Deployment trigger: 2026-10-27
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";

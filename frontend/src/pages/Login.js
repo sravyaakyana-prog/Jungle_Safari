@@ -53,6 +53,7 @@ const AnimatedEmoji = ({ emoji, size = 50, top, left, delay = 0 }) => (
     {emoji}
   </Box>
 );
+console.log("Login.js loaded"); // Debugging statement
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -115,6 +116,7 @@ const Login = () => {
     }
   };
 
+  console.log("Login.js rendered"); // Debugging statement
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
